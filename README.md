@@ -1,4 +1,4 @@
-# pterodactyl_ansible
+# [Pterodactyl](https://pterodactyl.io/) daemon installer for [Ansible](https://www.ansible.com/)
 Ansible playbook for setting up the pterodactyl daemon
 
 ## Requirements
@@ -10,13 +10,13 @@ Ansible playbook for setting up the pterodactyl daemon
 `/etc/ansible/hosts`
 ```
 [pterodactyl]
-**<YOUR DOMAIN>** ansible_user=root letsencrypt_email=**<YOUR EMAIL>** domain_name=**<YOUR DOMAIN>**
+<YOUR DOMAIN> ansible_user=root letsencrypt_email=<YOUR EMAIL> domain_name=<YOUR DOMAIN>
 ```
 
 ## Steps
 
 1. Install your OS
 2. Set up ansible on your controller machine and make sure that your server has the required entry in the `/etc/ansible/hosts` file.
-3. Run the playbook `ansible-playbook pterodactyl.yml -b -K -l '**<HOST or ANSIBLE GROUP>**'
+3. Run the playbook `ansible-playbook pterodactyl.yml -b -K -l '<HOST or ANSIBLE GROUP>'`
 4. Copy the config from your panel to `/srv/daemon/config/core.json` on your new node
 5. Run `systemctl start wings`
