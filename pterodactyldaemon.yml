@@ -1,0 +1,10 @@
+---
+- name: Install Peterodactyl Daemon
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - pteroreqs
+    - letsencrypt
+    - docker
+    - pterodaemon
