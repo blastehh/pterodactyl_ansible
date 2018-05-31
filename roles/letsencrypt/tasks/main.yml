@@ -1,0 +1,16 @@
+---
+- name: Add the certbot Repository
+  apt_repository:
+    repo: ppa:certbot/certbot
+
+- name: Install Certbot
+  apt:
+    name: "certbot"
+    state: "present"
+    update_cache: yes
+
+- name: Generate Certbot Certificate
+  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} --dry-run
+  args:
+    creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+...

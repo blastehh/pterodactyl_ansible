@@ -1,3 +1,8 @@
+---
+- name: Check for latest version
+  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
+  register: ptversion
+
 - name: Create Daemon Folders
   file:
     path: "{{ item }}"
@@ -11,7 +16,7 @@
 
 - name: Download Daemon Files
   get_url:
-    url: https://github.com/pterodactyl/daemon/releases/download/v0.5.6/daemon.tar.gz
+    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
     dest: /srv/daemon/daemon.tar.gz
 
 - name: Extract Daemon Files
@@ -35,10 +40,8 @@
 - name: Enable the Wings Service
   service: name=wings enabled=yes
 
-- name: Generate Certbot Certificate
-  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
-
 - name: Finished
   debug:
     msg:
       - "Save your config at /srv/daemon/config/core.json and then run systemctl start wings"
+...
