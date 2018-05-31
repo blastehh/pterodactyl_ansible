@@ -10,7 +10,7 @@
     update_cache: yes
 
 - name: Generate Certbot Certificate
-  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} --dry-run
+  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
   args:
     creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 ...
