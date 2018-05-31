@@ -1,9 +1,0 @@
----
-- name: Install Peterodactyl
-  hosts: all
-  become: yes
-  become_method: sudo
-  roles:
-    - pteroreqs
-    - docker
-    - pterodaemon
