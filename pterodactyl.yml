@@ -1,0 +1,25 @@
+- hosts: pteroall
+  become: yes
+  become_method: sudo
+  strategy: free
+  roles:
+    - letsencrypt
+
+- hosts: pteropanel
+  become: yes
+  become_method: sudo
+  strategy: free
+  roles:
+    - pteropanelreqs
+    - mariadb
+    - pteropaneldbsetup
+    - pteropanel
+
+- hosts: pterodaemon
+  become: yes
+  become_method: sudo
+  strategy: free
+  roles:
+    - pteroreqs
+    - docker
+    - pterodaemon

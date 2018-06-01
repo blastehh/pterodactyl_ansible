@@ -7,14 +7,22 @@
 [pterodaemon]
 <YOUR DOMAIN> ansible_user=root domain_name=<YOUR DOMAIN>
 
-[pterodaemon:vars]
+[pteroall:children]
+pteropanel
+pterodaemon
+
+[pteroall:vars]
+letsencrypt_email=<YOUR EMAIL> #CHANGE ME - Your Email Address
 staging=false
-letsencrypt_email=<YOUR EMAIL>
+
+[pterodaemon:vars]
 
 [pteropanel:vars]
-staging=false
-letsencrypt_email=<YOUR EMAIL>
-pt_email=<YOUR EMAIL>
+pt_email=<YOUR EMAIL> #CHANGE ME - Your Email Address
+pt_email=<YOUR PANEL EMAIL ADDRESS> #CHANGE ME - Panel Send From Email Address
+pt_email_from=Pterodactyl Panel #CHANGE ME - Panel Send From Email Name
+pt_user_fname=John #CHANGE ME - Panel Admin First Name
+pt_user_lname=Smith #CHANGE ME - Panel Admin Last Name
 pt_timezone=Europe/London
 pt_cache=redis
 pt_session=redis
@@ -25,6 +33,5 @@ pt_redis_port=6379
 pt_db_host=localhost
 pt_db_port=3306
 pt_mail_driver=mail
-pt_email=<YOUR PANEL EMAIL ADDRESS>
-pt_email_from=Pterodactyl Panel
 pt_mail_encrypt=tls
+pt_user=admin
