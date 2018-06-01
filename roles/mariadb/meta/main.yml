@@ -1,0 +1,7 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: "https://github.com/blastehh/pterodactyl_ansible"
+  description: "Install MariaDB."
+  min_ansible_version: 2.4

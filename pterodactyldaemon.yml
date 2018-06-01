@@ -1,6 +1,6 @@
 ---
 - name: Install Peterodactyl Daemon
-  hosts: all
+  hosts: pterodaemon
   become: yes
   become_method: sudo
   roles:

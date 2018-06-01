@@ -1,0 +1,21 @@
+---
+- name: Add Pterodactyl Database
+  mysql_db:
+    login_user: "root"
+    login_password: "{{ db_pass }}"
+    name: panel
+    state: present
+
+- name: Generate DB Pass
+  set_fact:
+    ptdb_pass: "{{ lookup('password', '/dev/null chars=ascii_letters length=15') }}"
+
+- name: Add Pterodactyl Database User
+  mysql_user:
+    login_user: "root"
+    login_password: "{{ db_pass }}"
+    name: pterodactyl
+    password: "{{ ptdb_pass }}"
+    priv: 'panel.*:ALL'
+    state: present
+...

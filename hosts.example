@@ -1,0 +1,30 @@
+# Use this file to help build your ansible hosts file
+# You will need to specify the variables below to match your setup
+
+[pteropanel]
+<YOUR DOMAIN> ansible_user=root domain_name=<YOUR DOMAIN>
+
+[pterodaemon]
+<YOUR DOMAIN> ansible_user=root domain_name=<YOUR DOMAIN>
+
+[pterodaemon:vars]
+staging=false
+letsencrypt_email=<YOUR EMAIL>
+
+[pteropanel:vars]
+staging=false
+letsencrypt_email=<YOUR EMAIL>
+pt_email=<YOUR EMAIL>
+pt_timezone=Europe/London
+pt_cache=redis
+pt_session=redis
+pt_queue=redis
+pt_redis_host=localhost
+pt_redis_pass=
+pt_redis_port=6379
+pt_db_host=localhost
+pt_db_port=3306
+pt_mail_driver=mail
+pt_email=<YOUR PANEL EMAIL ADDRESS>
+pt_email_from=Pterodactyl Panel
+pt_mail_encrypt=tls
