@@ -1,0 +1,64 @@
+---
+- name: Add Firewall Rules
+  firewalld:
+    port: "{{ item.port }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  with_items:
+    - {port: '8080/tcp'}
+    - {port: '2020/tcp'}
+
+- name: Add Docker to Trusted Firewall Zone
+  firewalld:
+    zone: trusted
+    interface: docker0
+    permanent: true
+    state: enabled
+
+- name: Check for latest version
+  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
+  register: ptversion
+
+- name: Create Daemon Folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  with_items:
+    - /srv/daemon
+    - /srv/daemon-data
+
+- name: Download Daemon Files
+  get_url:
+    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
+    dest: /srv/daemon/daemon.tar.gz
+
+- name: Extract Daemon Files
+  unarchive:
+    src: /srv/daemon/daemon.tar.gz
+    dest: /srv/daemon/
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: Install the Daemon
+  command: npm install --only=production
+  args:
+    chdir: /srv/daemon
+
+- name: Create the Daemon Service
+  template:
+    src: templates/wings.j2
+    dest: /etc/systemd/system/wings.service
+
+- name: Enable the Wings Service
+  service: name=wings enabled=yes
+
+- name: Finished
+  debug:
+    msg:
+      - "Save your config at /srv/daemon/config/core.json and then run systemctl start wings"
+...

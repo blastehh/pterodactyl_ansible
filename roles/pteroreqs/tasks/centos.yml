@@ -1,0 +1,20 @@
+---
+- name: Add the NodeJS Repository
+  shell: curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
+  args:
+    warn: False
+
+- name: Install Daemon Dependencies
+  yum:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "tar" 
+    - "unzip"
+    - "make"
+    - "gcc"
+    - "gcc-c++"
+    - "python"
+    - "curl"
+    - "nodejs"
+...

@@ -49,7 +49,11 @@ server {
     location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         # the fastcgi_pass path needs to be changed accordingly when using CentOS
+        {% if ansible_distribution == 'CentOS' %}
+        fastcgi_pass unix:/var/run/php-fpm/pterodactyl.sock;
+        {% else %}
         fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        {% endif %}
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";

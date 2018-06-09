@@ -3,6 +3,8 @@
   become_method: sudo
   strategy: free
   roles:
+    - epel
+    - firewalld
     - letsencrypt
 
 - hosts: pteropanel

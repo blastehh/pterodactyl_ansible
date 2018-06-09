@@ -1,0 +1,21 @@
+---
+- name: Add the NodeJS Repository
+  shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  args:
+    warn: False
+
+- name: Install Daemon Dependencies
+  apt:
+    update_cache: "yes"
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "tar" 
+    - "unzip"
+    - "make"
+    - "gcc"
+    - "g++"
+    - "python"
+    - "curl"
+    - "nodejs"
+...

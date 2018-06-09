@@ -1,52 +1,7 @@
 ---
-- name: Get service List
-  service_facts:
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: Check for Nginx
-  set_fact:
-    is_nginx: true
-  when: ansible_facts.services.nginx is defined
-
-- name: Check for Apache
-  set_fact:
-    is_apache: true
-  when: ansible_facts.services.apache2 is defined
-      
-- name: Add the certbot Repository
-  apt_repository:
-    repo: ppa:certbot/certbot
-
-- name: Install Certbot
-  apt:
-    name: "certbot"
-    state: "present"
-    update_cache: yes
-
-- name: Stop Nginx
-  service: name=nginx state=stopped
-  when: is_nginx is defined
-
-- name: Stop Apache
-  service: name=apache2 state=stopped
-  when: is_apache is defined
-
-- name: Generate Certbot Certificate STAGING
-  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} --staging
-  args:
-    creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
-  when: staging
-
-- name: Generate Certbot Certificate
-  command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
-  args:
-    creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
-  when: staging is defined and staging is match("false")
-
-- name: Start Nginx
-  service: name=nginx state=started
-  when: is_nginx is defined
-
-- name: Start Apache
-  service: name=apache2 state=started
-  when: is_apache is defined
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
 ...

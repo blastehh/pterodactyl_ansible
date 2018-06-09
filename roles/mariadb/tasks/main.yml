@@ -1,32 +1,11 @@
 ---
-- name: Add the MariaDB Repository
-  shell: curl -sSL https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash -s --
-  args:
-    warn: False
-
 - name: Generate DB Pass
   set_fact:
     db_pass: "{{ lookup('password', '/dev/null chars=ascii_letters length=15') }}"
 
-- name: Configure MariaDB Installation
-  debconf:
-    name: mariadb-server
-    question: "{{ item }}"
-    vtype: password
-    value: "{{ db_pass }}"
-  with_items:
-    - mysql-server/root_password
-    - mysql-server/root_password_again
-  register: configure_install
-  
-- debug:
-    msg: "Database password set to '{{ db_pass }}', save this somewhere."
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: Install MariaDB with custom configuration
-  apt:
-    name: mariadb-server
-    state: latest
-    update_cache: true
-  when: configure_install is successful
-  register: install_mariadb
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
 ...

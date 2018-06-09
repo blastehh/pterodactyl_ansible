@@ -1,0 +1,12 @@
+---
+# Required for Let's Encrypt, and Panel
+- name: Add Firewall Rules
+  firewalld:
+    port: "{{ item.port }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  with_items:
+    - {port: '443/tcp'}
+    - {port: '80/tcp'}
+...

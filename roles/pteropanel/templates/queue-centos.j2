@@ -1,0 +1,21 @@
+# Pterodactyl Queue Worker File
+# ----------------------------------
+# File should be placed in:
+# /etc/systemd/system
+#
+# nano /etc/systemd/system/pteroq.service
+
+[Unit]
+Description=Pterodactyl Queue Worker
+After=redis-server.service
+
+[Service]
+# On some systems the user and group might be different.
+# Some systems use `apache` as the user and group.
+User=nginx
+Group=nginx
+Restart=on-failure
+ExecStart=/usr/bin/php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+
+[Install]
+WantedBy=multi-user.target

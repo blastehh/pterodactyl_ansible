@@ -1,0 +1,39 @@
+---
+- name: Remove Old Docker Versions
+  yum:
+    name: "{{ item }}"
+    state: "removed"
+  with_items:
+    - "docker"
+    - "docker-client"
+    - "docker-client-latest"
+    - "docker-common"
+    - "docker-latest"
+    - "docker-latest-logrotate"
+    - "docker-logrotate"
+    - "docker-selinux"
+    - "docker-engine-selinux"
+    - "docker-engine"
+
+- name: Add Docker Repository
+  yum_repository:
+    name: docker-ce
+    description: Docker-CE
+    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable/
+
+- rpm_key:
+    state: present
+    key: https://download.docker.com/linux/centos/gpg
+
+- name: Install DockerCE
+  yum:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "device-mapper-persistent-data"
+    - "lvm2"
+    - "docker-ce"
+
+- name: Start the Docker Service
+  service: name=docker state=started enabled=yes
+...
