@@ -3,7 +3,7 @@ Ansible playbook for setting up the pterodactyl panel and daemon
 
 ## Requirements
 
-* A fresh install of **Ubuntu 16.04**, try it on other distros at your own peril. (needs apt)
+* A fresh install of **Ubuntu 16.04** or **CentOS 7.4**, might also work with Debian, but untested.
 * **python** installed for ansible to work
 
 ## Generic steps for both types of install
