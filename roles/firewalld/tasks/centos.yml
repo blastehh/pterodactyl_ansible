@@ -1,4 +1,12 @@
 ---
+- name: Get service List
+  service_facts:
+
+- name: Check for firewalld
+  set_fact:
+    is_firewalld: true
+  when: ansible_facts.services.firewalld is defined
+
 # Required for Let's Encrypt, and Panel
 - name: Add Firewall Rules
   firewalld:
@@ -9,4 +17,5 @@
   with_items:
     - {port: '443/tcp'}
     - {port: '80/tcp'}
+  when: is_firewalld is defined
 ...

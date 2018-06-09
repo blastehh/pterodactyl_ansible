@@ -8,6 +8,7 @@
   with_items:
     - {port: '8080/tcp'}
     - {port: '2020/tcp'}
+  when: is_firewalld is defined
 
 - name: Add Docker to Trusted Firewall Zone
   firewalld:
@@ -15,6 +16,7 @@
     interface: docker0
     permanent: true
     state: enabled
+  when: is_firewalld is defined
 
 - name: Check for latest version
   uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"

@@ -10,7 +10,8 @@
     name: "{{ item }}"
     state: "present"
   with_items:
-    - "tar" 
+    - "sudo"
+    - "tar"
     - "unzip"
     - "make"
     - "gcc"

@@ -2,7 +2,7 @@
 - name: Remove Old Docker Versions
   yum:
     name: "{{ item }}"
-    state: "removed"
+    state: "absent"
   with_items:
     - "docker"
     - "docker-client"
