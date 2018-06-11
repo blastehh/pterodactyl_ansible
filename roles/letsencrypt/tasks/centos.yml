@@ -5,12 +5,12 @@
 - name: Check for Nginx
   set_fact:
     is_nginx: true
-  when: ansible_facts.services.nginx is defined
+  when: services["nginx"] is defined
 
 - name: Check for Apache
   set_fact:
     is_apache: true
-  when: ansible_facts.services.apache2 is defined
+  when: services["apache2"] is defined
       
 - name: Install Certbot
   yum:

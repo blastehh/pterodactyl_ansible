@@ -5,7 +5,7 @@
 - name: Check for firewalld
   set_fact:
     is_firewalld: true
-  when: ansible_facts.services.firewalld is defined
+  when: services["firewalld.service"] is defined
 
 # Required for Let's Encrypt, and Panel
 - name: Add Firewall Rules
