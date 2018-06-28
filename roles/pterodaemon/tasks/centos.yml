@@ -1,5 +1,5 @@
 ---
-- name: Add Firewall Rules
+- name: CentOS | Add Firewall Rules
   firewalld:
     port: "{{ item.port }}"
     permanent: true
@@ -10,7 +10,7 @@
     - {port: '2020/tcp'}
   when: is_firewalld is defined
 
-- name: Add Docker to Trusted Firewall Zone
+- name: CentOS | Add Docker to Trusted Firewall Zone
   firewalld:
     zone: trusted
     interface: docker0
@@ -18,11 +18,11 @@
     state: enabled
   when: is_firewalld is defined
 
-- name: Check for latest version
+- name: CentOS | Check for the Latest Daemon Version
   uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
   register: ptversion
 
-- name: Create Daemon Folders
+- name: CentOS | Create Daemon Folders
   file:
     path: "{{ item }}"
     state: directory
@@ -33,12 +33,12 @@
     - /srv/daemon
     - /srv/daemon-data
 
-- name: Download Daemon Files
+- name: CentOS | Download Daemon Files
   get_url:
     url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
     dest: /srv/daemon/daemon.tar.gz
 
-- name: Extract Daemon Files
+- name: CentOS | Extract Daemon Files
   unarchive:
     src: /srv/daemon/daemon.tar.gz
     dest: /srv/daemon/
@@ -46,20 +46,20 @@
     extra_opts:
       - --strip-components=1
 
-- name: Install the Daemon
+- name: CentOS | Install the Daemon
   command: npm install --only=production
   args:
     chdir: /srv/daemon
 
-- name: Create the Daemon Service
+- name: CentOS | Create the Daemon Service
   template:
     src: templates/wings.j2
     dest: /etc/systemd/system/wings.service
 
-- name: Enable the Wings Service
+- name: CentOS | Enable the Wings Service
   service: name=wings enabled=yes
 
-- name: Finished
+- name: CentOS | Finished
   debug:
     msg:
       - "Save your config at /srv/daemon/config/core.json and then run systemctl start wings"

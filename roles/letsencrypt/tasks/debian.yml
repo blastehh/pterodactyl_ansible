@@ -1,53 +1,53 @@
 ---
-- name: Get service List
+- name: Debian/Ubuntu | Get service List
   service_facts:
 
-- name: Check for Nginx
+- name: Debian/Ubuntu | Check for Nginx
   set_fact:
     is_nginx: true
   when: services["nginx"] is defined
 
-- name: Check for Apache
+- name: Debian/Ubuntu | Check for Apache
   set_fact:
     is_apache: true
   when: services["apache2"] is defined
       
-- name: Add the certbot Repository
+- name: Ubuntu | Add the certbot Repository
   apt_repository:
     repo: ppa:certbot/certbot
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution|lower == 'ubuntu'
 
-- name: Install Certbot
+- name: Debian/Ubuntu | Install Certbot
   apt:
     name: "certbot"
     state: "present"
     update_cache: yes
 
-- name: Stop Nginx
+- name: Debian/Ubuntu | Stop Nginx
   service: name=nginx state=stopped
   when: is_nginx is defined
 
-- name: Stop Apache
+- name: Debian/Ubuntu | Stop Apache
   service: name=apache2 state=stopped
   when: is_apache is defined
 
-- name: Generate Certbot Certificate STAGING
+- name: Debian/Ubuntu | Generate Certbot Certificate STAGING
   command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }} --staging
   args:
     creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
   when: staging
 
-- name: Generate Certbot Certificate PRODUCTION
+- name: Debian/Ubuntu | Generate Certbot Certificate PRODUCTION
   command: certbot certonly --standalone -m {{ letsencrypt_email }} --agree-tos -d {{ domain_name }}
   args:
     creates: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
   when: staging is defined and staging is match("false")
 
-- name: Start Nginx
+- name: Debian/Ubuntu | Start Nginx
   service: name=nginx state=started
   when: is_nginx is defined
 
-- name: Start Apache
+- name: Debian/Ubuntu | Start Apache
   service: name=apache2 state=started
   when: is_apache is defined
 ...

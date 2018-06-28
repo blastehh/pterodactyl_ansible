@@ -1,10 +1,10 @@
 ---
-- name: Add the MariaDB Repository
+- name: Debian/Ubuntu | Add the MariaDB Repository
   shell: curl -sSL https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash -s --
   args:
     warn: False
 
-- name: Configure MariaDB Installation
+- name: Debian/Ubuntu | Configure MariaDB Installation
   debconf:
     name: mariadb-server
     question: "{{ item }}"
@@ -16,9 +16,9 @@
   register: configure_install
   
 - debug:
-    msg: "Database password set to '{{ db_pass }}', save this somewhere."
+    msg: "Database Root password set to '{{ db_pass }}', save this somewhere."
 
-- name: Install MariaDB with custom configuration
+- name: Debian/Ubuntu | Install MariaDB with custom configuration
   apt:
     name: mariadb-server
     state: latest

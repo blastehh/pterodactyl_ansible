@@ -2,6 +2,13 @@
   become: yes
   become_method: sudo
   strategy: free
+  gather_facts: no
+  pre_tasks:
+    - name: Install Python
+      raw: 'type python >/dev/null 2>&1 || apt-get -y install python-minimal'
+      changed_when: false
+    - name: Gather Facts
+      setup:
   roles:
     - epel
     - firewalld
@@ -22,6 +29,6 @@
   become_method: sudo
   strategy: free
   roles:
-    - pteroreqs
+    - pterodaemonreqs
     - docker
     - pterodaemon

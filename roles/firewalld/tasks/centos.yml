@@ -1,14 +1,14 @@
 ---
-- name: Get service List
+- name: CentOS | Get service List
   service_facts:
 
-- name: Check for firewalld
+- name: CentOS | Check for firewalld
   set_fact:
     is_firewalld: true
   when: services["firewalld.service"] is defined
 
 # Required for Let's Encrypt, and Panel
-- name: Add Firewall Rules
+- name: CentOS | Add Firewall Rules
   firewalld:
     port: "{{ item.port }}"
     permanent: true

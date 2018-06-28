@@ -1,5 +1,5 @@
 ---
-- name: Remove Old Docker versions
+- name: Debian/Ubuntu | Remove Old Docker versions
   apt:
     name: "{{ item }}"
     state: "absent"
@@ -8,7 +8,7 @@
     - "docker-engine"
     - "docker.io"
 
-- name: Install Docker Dependencies
+- name: Debian/Ubuntu | Install Docker Dependencies
   apt:
     update_cache: "yes"
     name: "{{ item }}"
@@ -19,29 +19,29 @@
     - "software-properties-common"
     - "curl"
 
-- name: Debian Specific Dependencies
+- name: Debian | Debian Specific Dependencies
   apt:
     update_cache: "yes"
     name: "gnupg2"
     state: "present"
-  when: ansible_distribution == 'Debian'
+  when: ansible_distribution|lower == 'debian'
 
-- name: Get the Docker GPG key
+- name: Debian/Ubuntu | Get the Docker GPG key
   apt_key:
     url: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"
     state: "present"
 
-- name: Add the Docker Repository
+- name: Debian/Ubuntu | Add the Docker Repository
   apt_repository:
     repo: deb https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_lsb.codename }} stable
     state: "present"
 
-- name: Install DockerCE
+- name: Debian/Ubuntu | Install DockerCE
   apt: 
     update_cache: "yes"
     name: "docker-ce"
     state: "present"
     
-- name: Start the Docker Service
+- name: Debian/Ubuntu | Start the Docker Service
   service: name=docker state=started enabled=yes
 ...

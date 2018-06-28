@@ -1,5 +1,5 @@
 ---
-- name: Install Panel Dependencies
+- name: CentOS | Install Panel Dependencies
   yum:
     name: "{{ item }}"
     state: "present"
@@ -10,6 +10,6 @@
     - "libselinux-python"
     - "policycoreutils-python"
 
-- name: Start the Redis Service
+- name: CentOS | Start the Redis Service
   service: name=redis state=started enabled=yes
 ...

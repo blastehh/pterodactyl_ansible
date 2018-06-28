@@ -1,10 +1,10 @@
 ---
-- name: Add the NodeJS Repository
+- name: CentOS | Add the NodeJS Repository
   shell: curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
   args:
     warn: False
 
-- name: Install Daemon Dependencies
+- name: CentOS | Install Daemon Dependencies
   yum:
     name: "{{ item }}"
     state: "present"
