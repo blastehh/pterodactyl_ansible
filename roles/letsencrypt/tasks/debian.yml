@@ -1,4 +1,50 @@
 ---
+- name: Ubuntu | Add the certbot Repository
+  apt_repository:
+    repo: ppa:certbot/certbot
+  when: ansible_distribution|lower == 'ubuntu'
+
+- name: Debian/Ubuntu | Install Certbot-nginx
+  apt:
+    update_cache: "yes"
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "software-properties-common"
+    - "certbot"
+  when: "'pterodaemon' in group_names"
+
+- name: Debian/Ubuntu | Install Certbot-nginx
+  apt:
+    update_cache: "yes"
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "software-properties-common"
+    - "python-certbot-nginx"
+  when: "'pteropanel' in group_names"
+
+- name: "Debian | Add {{ ansible_distribution_release }}-backports"
+  template:
+    src: templates/debian-backports.j2
+    dest: "/etc/apt/sources.list.d/{{ ansible_distribution_release }}-backports.list"
+  when: "ansible_distribution|lower == 'debian'"
+
+- name: "Debian | Update {{ ansible_distribution_release }}-backports"
+  apt:
+    update_cache: yes
+  when: "ansible_distribution|lower == 'debian'"
+
+- name: "Debian | Install Certbot from {{ ansible_distribution_release }}-backports"
+  apt:
+    update_cache: "yes"
+    name: "{{ item }}"
+    state: "latest"
+    default_release: "{{ ansible_distribution_release }}-backports"
+  with_items:
+    - "certbot"
+  when: "ansible_distribution|lower == 'debian'"
+
 - name: Debian/Ubuntu | Get service List
   service_facts:
 
@@ -11,17 +57,6 @@
   set_fact:
     is_apache: true
   when: services["apache2"] is defined
-      
-- name: Ubuntu | Add the certbot Repository
-  apt_repository:
-    repo: ppa:certbot/certbot
-  when: ansible_distribution|lower == 'ubuntu'
-
-- name: Debian/Ubuntu | Install Certbot
-  apt:
-    name: "certbot"
-    state: "present"
-    update_cache: yes
 
 - name: Debian/Ubuntu | Stop Nginx
   service: name=nginx state=stopped

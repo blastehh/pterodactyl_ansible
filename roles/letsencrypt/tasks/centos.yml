@@ -1,4 +1,16 @@
 ---
+- name: CentOS | Install Certbot
+  yum:
+    name: "certbot"
+    state: "present"
+  when: "'pterodaemon' in group_names"
+
+- name: CentOS | Install Certbot-nginx
+  yum:
+    name: "python2-certbot-nginx"
+    state: "present"
+  when: "'pteropanel' in group_names"
+
 - name: CentOS | Get service List
   service_facts:
 
@@ -11,11 +23,6 @@
   set_fact:
     is_apache: true
   when: services["apache2"] is defined
-      
-- name: CentOS | Install Certbot
-  yum:
-    name: "certbot"
-    state: "present"
 
 - name: CentOS | Stop Nginx
   service: name=nginx state=stopped

@@ -16,6 +16,7 @@ letsencrypt_email=<YOUR EMAIL> #CHANGE ME - Your Email Address
 staging=false
 
 [pterodaemon:vars]
+ptd_dir=/srv
 
 [pteropanel:vars]
 pt_email=<YOUR EMAIL> #CHANGE ME - Your Email Address
@@ -35,3 +36,4 @@ pt_db_port=3306
 pt_mail_driver=mail
 pt_mail_encrypt=tls
 pt_user=admin
+pt_dir=/var/www/pterodactyl

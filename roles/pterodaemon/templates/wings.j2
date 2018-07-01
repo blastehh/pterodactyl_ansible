@@ -5,10 +5,10 @@ After=docker.service
 [Service]
 User=root
 #Group=some_group
-WorkingDirectory=/srv/daemon
+WorkingDirectory={{ ptd_dir }}/daemon
 LimitNOFILE=4096
 PIDFile=/var/run/wings/daemon.pid
-ExecStart=/usr/bin/node /srv/daemon/src/index.js
+ExecStart=/usr/bin/node {{ ptd_dir }}/daemon/src/index.js
 Restart=on-failure
 StartLimitInterval=600
 

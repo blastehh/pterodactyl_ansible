@@ -19,76 +19,77 @@
     group: root
     mode: 0775
   with_items:
-    - /var/www/pterodactyl
+    - "{{ pt_dir }}"
 
 - name: CentOS | Download Panel Files
   get_url:
     url: "https://github.com/pterodactyl/panel/releases/download/v{{ ptversion.json.panel }}/panel.tar.gz"
-    dest: /var/www/pterodactyl/panel.tar.gz
+    dest: "{{ pt_dir }}/panel.tar.gz"
 
 - name: CentOS | Extract Panel Files
   unarchive:
-    src: /var/www/pterodactyl/panel.tar.gz
-    dest: /var/www/pterodactyl
+    src: "{{ pt_dir }}/panel.tar.gz"
+    dest: "{{ pt_dir }}"
     remote_src: yes
     extra_opts:
       - --strip-components=1
 
 - name: CentOS | Chmod Log Folder
   file:
-    path: /var/www/pterodactyl/storage/
+    path: "{{ pt_dir }}/storage/"
     mode: 0755
     recurse: yes
 
 - name: CentOS | Chmod Cache Folder
   file:
-    path: /var/www/pterodactyl/bootstrap/cache
+    path: "{{ pt_dir }}/bootstrap/cache"
     mode: 0755
     recurse: yes
 
 - name: CentOS | Install Composer
   shell: curl -sSL https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
     creates: /usr/local/bin/composer
     warn: false
 
 - name: CentOS | Copy .env File
   copy:
-    src: /var/www/pterodactyl/.env.example
-    dest: /var/www/pterodactyl/.env
+    src: "{{ pt_dir }}/.env.example"
+    dest: "{{ pt_dir }}/.env"
     remote_src: yes
+    force: no
 
 - name: CentOS | Install the Panel
   command: composer install --no-dev
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 
 - name: CentOS | Generate the Panel Key
-  command: php artisan key:generate --force -n
+  command: php artisan key:generate -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 
 #php artisan p:environment:setup
 - name: CentOS | Artisan Setup
   command: php artisan p:environment:setup --author="{{ pt_email }}" --url=https://{{ domain_name }} --timezone="{{ pt_timezone }}" --cache="{{ pt_cache }}" --session="{{ pt_session }}" --queue="{{ pt_queue }}" --redis-host="{{ pt_redis_host }}" --redis-pass="{{ pt_redis_pass }}" --redis-port="{{ pt_redis_port }}" --env=production -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 #php artisan p:environment:database
 - name: CentOS | Artisan Database Setup
   command: php artisan p:environment:database --host="{{ pt_db_host }}" --port="{{ pt_db_port }}" --database=panel --username=pterodactyl --password="{{ ptdb_pass }}" -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 #php artisan p:environment:mail
 - name: CentOS | Artisan Mail Setup
   command: php artisan p:environment:mail --driver="{{ pt_mail_driver }}" --email="{{ pt_email }}" --from="{{ pt_email_from }}" --encryption="{{ pt_mail_encrypt }}" -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 
 - name: CentOS | Artisan Migrate Database
   command: php artisan migrate --seed --force -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 
 - name: CentOS | Generate Admin Account Password
   set_fact:
@@ -98,28 +99,28 @@
 - name: CentOS | Add Panel User
   command: php artisan p:user:make --email={{ pt_email }} --username={{ pt_user }} --name-first={{ pt_user_fname }} --name-last={{ pt_user_lname }} --password={{ pt_user_pass }} --admin=1 -n
   args:
-    chdir: /var/www/pterodactyl
+    chdir: "{{ pt_dir }}"
 
 - name: CentOS | Chroot Pterodactyl Web Root
   file:
-    path: /var/www/pterodactyl
+    path: "{{ pt_dir }}"
     owner: nginx
     group: nginx
     recurse: yes
 
 - name: CentOS | semanage fcontext
   sefcontext:
-    target: '/var/www/pterodactyl/storage(/.*)?'
+    target: '{{ pt_dir }}/storage(/.*)?'
     setype: httpd_sys_rw_content_t
     state: present
 
-- name: CentOS | restorecon -R /var/www/pterodactyl
-  command: restorecon -R /var/www/pterodactyl
+- name: "CentOS | restorecon -R {{ pt_dir }}"
+  command: "restorecon -R {{ pt_dir }}"
 
 - name: CentOS | Create Cron Job
   cron:
     name: "Pterodactyl Queue Scheduler"
-    job: "php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"
+    job: "php {{ pt_dir }}/artisan schedule:run >> /dev/null 2>&1"
 
 - name: CentOS | Remove Default Nginx Config
   file:
@@ -134,6 +135,13 @@
 - name: CentOS | Reload Nginx
   service: name=nginx enabled=yes state=reloaded
 
+- name: CentOS | Add Certbot cron.daily File
+  template:
+    src: templates/certbot.j2
+    dest: /etc/cron.daily/certbot-nginx
+    mode: '0755'
+    force: no
+
 - name: CentOS | Set httpd_can_network_connect for SELinux
   seboolean:
     name: httpd_can_network_connect
@@ -142,7 +150,7 @@
 
 - name: CentOS | Create the Queue Service
   template:
-    src: templates/queue-centos.j2
+    src: templates/queue.j2
     dest: /etc/systemd/system/pteroq.service
 
 - name: CentOS | Start the Queue Service

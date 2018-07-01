@@ -1,0 +1,17 @@
+---
+- name: CentOS | Install NTP
+  yum:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "ntp"
+
+- name: CentOS | Stop NTP Service
+  service: name=ntpd state=stopped
+
+- name: CentOS | Set System Time
+  command: "ntpd -gq"
+
+#- name: CentOS | Start NTP Service
+#  service: name=ntpd enabled=yes state=started
+...
