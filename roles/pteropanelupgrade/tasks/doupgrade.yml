@@ -1,0 +1,58 @@
+---
+- debug:
+    msg: "Starting upgrade to {{ ptversion.json.panel }}"
+
+- name: Download Panel Files
+  get_url:
+    url: "https://github.com/pterodactyl/panel/releases/download/v{{ ptversion.json.panel }}/panel.tar.gz"
+    dest: "{{ pt_dir }}/panel.tar.gz"
+    force: yes
+
+- name: Stop the Panel
+  command: "php artisan down"
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Extract Panel Files
+  unarchive:
+    src: "{{ pt_dir }}/panel.tar.gz"
+    dest: "{{ pt_dir }}"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: Chmod Log Folder
+  file:
+    path: "{{ pt_dir }}/storage/"
+    mode: 0755
+    recurse: yes
+
+- name: Chmod Cache Folder
+  file:
+    path: "{{ pt_dir }}/bootstrap/cache"
+    mode: 0755
+    recurse: yes
+
+- name: Delete Cache Contents
+  shell: "/bin/rm -rf {{ pt_dir }}/bootstrap/cache/*"
+
+- name: Install the Panel
+  command: composer install --no-dev
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Clear Cached Views
+  command: "php artisan view:clear"
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Artisan Update Database Structure
+  command: "php artisan migrate --force -n"
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Artisan Update Services and Service Options
+  command: "php artisan db:seed --force -n"
+  args:
+    chdir: "{{ pt_dir }}"
+...

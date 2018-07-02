@@ -2,13 +2,13 @@
 - name: CentOS | Install Certbot
   yum:
     name: "certbot"
-    state: "present"
+    state: "latest"
   when: "'pterodaemon' in group_names"
 
 - name: CentOS | Install Certbot-nginx
   yum:
     name: "python2-certbot-nginx"
-    state: "present"
+    state: "latest"
   when: "'pteropanel' in group_names"
 
 - name: CentOS | Get service List

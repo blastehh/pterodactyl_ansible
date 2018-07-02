@@ -28,7 +28,7 @@
 - name: CentOS | Install DockerCE
   yum:
     name: "{{ item }}"
-    state: "present"
+    state: "latest"
   with_items:
     - "device-mapper-persistent-data"
     - "lvm2"

@@ -1,0 +1,50 @@
+---
+- name: Check for the Latest Daemon Version
+  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
+  register: ptversion
+
+- name: Create Daemon Folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  with_items:
+    - "{{ ptd_dir }}/daemon"
+    - "{{ ptd_dir }}/daemon-data"
+
+- name: Download Daemon Files
+  get_url:
+    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
+    dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
+    force: yes
+
+- name: Extract Daemon Files
+  unarchive:
+    src: "{{ ptd_dir }}/daemon/daemon.tar.gz"
+    dest: "{{ ptd_dir }}/daemon/"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: Install the Daemon
+  command: "npm install --only=production"
+  args:
+    chdir: "{{ ptd_dir }}/daemon/"
+
+- name: Create the Daemon Service
+  template:
+    src: templates/wings.j2
+    dest: /etc/systemd/system/wings.service
+
+- name: Enable the Wings Service
+  service: name=wings enabled=yes
+
+- name: Add Certbot cron.daily File
+  template:
+    src: templates/certbot.j2
+    dest: /etc/cron.daily/certbot-daemon
+    mode: '0755'
+    force: no
+...

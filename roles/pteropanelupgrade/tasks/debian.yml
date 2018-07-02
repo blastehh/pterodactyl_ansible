@@ -1,0 +1,8 @@
+---
+- include: versioncheck.yml
+
+- include: doupgrade.yml
+  when: do_upgrade is defined
+
+- include: finishupgradedebian.yml
+...

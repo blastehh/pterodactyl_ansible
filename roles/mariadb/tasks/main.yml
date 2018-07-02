@@ -4,8 +4,8 @@
     db_pass: "{{ lookup('password', '/dev/null chars=ascii_letters length=15') }}"
 
 - include: debian.yml
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family|lower == 'debian'
 
 - include: centos.yml
-  when: ansible_distribution == 'CentOS'
+  when: ansible_distribution|lower == 'centos'
 ...

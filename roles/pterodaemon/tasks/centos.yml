@@ -18,53 +18,8 @@
     state: enabled
   when: is_firewalld is defined
 
-- name: CentOS | Check for the Latest Daemon Version
-  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
-  register: ptversion
-
-- name: CentOS | Create Daemon Folders
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0775
-  with_items:
-    - "{{ ptd_dir }}/daemon"
-    - "{{ ptd_dir }}/daemon-data"
-
-- name: CentOS | Download Daemon Files
-  get_url:
-    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
-
-- name: CentOS | Extract Daemon Files
-  unarchive:
-    src: "{{ ptd_dir }}/daemon/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/"
-    remote_src: yes
-    extra_opts:
-      - --strip-components=1
-
-- name: CentOS | Install the Daemon
-  command: "npm install --only=production"
-  args:
-    chdir: "{{ ptd_dir }}/daemon/"
-
-- name: CentOS | Create the Daemon Service
-  template:
-    src: templates/wings.j2
-    dest: /etc/systemd/system/wings.service
-
-- name: CentOS | Enable the Wings Service
-  service: name=wings enabled=yes
-
-- name: CentOS | Add Certbot cron.daily File
-  template:
-    src: templates/certbot.j2
-    dest: /etc/cron.daily/certbot-daemon
-    mode: '0755'
-    force: no
+- include: doinstall.yml
+  static: yes
 
 - name: CentOS | Finished
   debug:

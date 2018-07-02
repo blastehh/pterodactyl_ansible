@@ -1,0 +1,116 @@
+---
+- name: Check for latest version
+  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
+  register: ptversion
+
+- name: Create Panel Folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  with_items:
+    - "{{ pt_dir }}"
+
+- name: Download Panel Files
+  get_url:
+    url: "https://github.com/pterodactyl/panel/releases/download/v{{ ptversion.json.panel }}/panel.tar.gz"
+    dest: "{{ pt_dir }}/panel.tar.gz"
+    force: yes
+
+- name: Extract Panel Files
+  unarchive:
+    src: "{{ pt_dir }}/panel.tar.gz"
+    dest: "{{ pt_dir }}"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: Chmod Log Folder
+  file:
+    path: "{{ pt_dir }}/storage/"
+    mode: 0755
+    recurse: yes
+
+- name: Chmod Cache Folder
+  file:
+    path: "{{ pt_dir }}/bootstrap/cache"
+    mode: 0755
+    recurse: yes
+
+- name: Install Composer
+  shell: curl -sSL https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    chdir: "{{ pt_dir }}"
+    creates: /usr/local/bin/composer
+    warn: false
+
+- name: Copy .env File
+  copy:
+    src: "{{ pt_dir }}/.env.example"
+    dest: "{{ pt_dir }}/.env"
+    remote_src: yes
+    force: no
+
+- name: Install the Panel
+  command: composer install --no-dev
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Generate the Panel Key
+  command: php artisan key:generate -n
+  args:
+    chdir: "{{ pt_dir }}"
+
+#php artisan p:environment:setup
+- name: Artisan Setup
+  command: php artisan p:environment:setup --author="{{ pt_email }}" --url=https://{{ domain_name }} --timezone="{{ pt_timezone }}" --cache="{{ pt_cache }}" --session="{{ pt_session }}" --queue="{{ pt_queue }}" --redis-host="{{ pt_redis_host }}" --redis-pass="{{ pt_redis_pass }}" --redis-port="{{ pt_redis_port }}" --env=production -n
+  args:
+    chdir: "{{ pt_dir }}"
+#php artisan p:environment:database
+- name: Artisan Database Setup
+  command: php artisan p:environment:database --host="{{ pt_db_host }}" --port="{{ pt_db_port }}" --database=panel --username=pterodactyl --password="{{ ptdb_pass }}" -n
+  args:
+    chdir: "{{ pt_dir }}"
+#php artisan p:environment:mail
+- name: Artisan Mail Setup
+  command: php artisan p:environment:mail --driver="{{ pt_mail_driver }}" --email="{{ pt_email }}" --from="{{ pt_email_from }}" --encryption="{{ pt_mail_encrypt }}" -n
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Artisan Migrate Database
+  command: php artisan migrate --seed --force -n
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Generate Admin Account Password
+  set_fact:
+    pt_user_pass: "{{ lookup('password', '/dev/null chars=ascii_letters length=15') }}"
+
+#php artisan p:user:make
+- name: Add Panel User
+  command: php artisan p:user:make --email={{ pt_email }} --username={{ pt_user }} --name-first={{ pt_user_fname }} --name-last={{ pt_user_lname }} --password={{ pt_user_pass }} --admin=1 -n
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Create Cron Job
+  cron:
+    name: "Pterodactyl Queue Scheduler"
+    job: "php {{ pt_dir }}/artisan schedule:run >> /dev/null 2>&1"
+
+- name: Add Certbot cron.daily File
+  template:
+    src: templates/certbot.j2
+    dest: /etc/cron.daily/certbot-nginx
+    mode: '0755'
+    force: no
+
+- name: Create the Queue Service
+  template:
+    src: templates/queue.j2
+    dest: /etc/systemd/system/pteroq.service
+
+- name: Start the Queue Service
+  service: name=pteroq enabled=yes state=started
+...
