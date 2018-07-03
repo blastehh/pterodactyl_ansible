@@ -1,0 +1,19 @@
+---
+- name: Start the Queue Service
+  service: name=pteroq enabled=yes state=started
+
+- name: Start the Panel
+  command: "php artisan up"
+  args:
+    chdir: "{{ pt_dir }}"
+    
+- name: Start the Artisan Queues
+  command: "php artisan queue:restart"
+  args:
+    chdir: "{{ pt_dir }}"
+
+- debug:
+    msg: "Upgrade completed, running version check again..."
+
+- include: versioncheck.yml
+...

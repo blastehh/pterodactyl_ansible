@@ -4,5 +4,12 @@
 - include: doupgrade.yml
   when: do_upgrade is defined
 
-- include: finishupgradedebian.yml
+- name: Debian/Ubuntu | Chroot Pterodactyl Web Root
+  file:
+    path: "{{ pt_dir }}"
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+- include: finish.yml
 ...

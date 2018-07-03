@@ -4,5 +4,21 @@
 - include: doupgrade.yml
   when: do_upgrade is defined
 
-- include: finishupgradecentos.yml
+- name: CentOS | Chroot Pterodactyl Web Root
+  file:
+    path: "{{ pt_dir }}"
+    owner: nginx
+    group: nginx
+    recurse: yes
+
+- name: CentOS | semanage fcontext
+  sefcontext:
+    target: '{{ pt_dir }}/storage(/.*)?'
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: "CentOS | restorecon -R {{ pt_dir }}"
+  command: "restorecon -R {{ pt_dir }}"
+
+- include: finish.yml
 ...

@@ -1,6 +1,5 @@
 ---
 - include: doinstall.yml
-  static: yes
 
 - name: Debian/Ubuntu | Remove Default Nginx Config
   file:
@@ -25,17 +24,5 @@
     dest: "/etc/nginx/sites-enabled/pt_{{ domain_name }}.conf"
     state: link
 
-- name: Debian/Ubuntu | Reload Nginx
-  service: name=nginx enabled=yes state=reloaded
-
-- name: Debian/Ubuntu | Finished
-  debug:
-    msg:
-      - "IMPORTANT DETAILS:"
-      - "====================================================================="
-      - "Pterodactyl Database Username/Password is pterodactyl / {{ ptdb_pass }}"
-      - "MariaDB/MySQL Username/Password is root / {{ db_pass }}"
-      - "Pterodactyl Panel Admin Username/Password is {{ pt_user }} / {{ pt_user_pass }}"
-      - "====================================================================="
-      - "Please run this command to change your email settings: php artisan p:environment:mail"
+- include: finish.yml
 ...

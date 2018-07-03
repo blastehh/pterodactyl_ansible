@@ -1,9 +1,5 @@
 ---
 - include: doinstall.yml
-  static: yes
 
-- name: Debian/Ubuntu | Finished
-  debug:
-    msg:
-      - "Save your config at {{ ptd_dir }}/daemon/config/core.json and then run systemctl start wings"
+- include: finish.yml
 ...

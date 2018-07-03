@@ -8,7 +8,6 @@
   service: name=php-fpm enabled=yes state=started
 
 - include: doinstall.yml
-  static: yes
 
 - name: CentOS | Remove Default Nginx Config
   file:
@@ -42,17 +41,5 @@
     state: yes
     persistent: yes
 
-- name: CentOS | Reload Nginx
-  service: name=nginx enabled=yes state=reloaded
-
-- name: CentOS | Finished
-  debug:
-    msg:
-      - "IMPORTANT DETAILS:"
-      - "====================================================================="
-      - "Pterodactyl Database Username/Password is pterodactyl / {{ ptdb_pass }}"
-      - "MariaDB/MySQL Username/Password is root / {{ db_pass }}"
-      - "Pterodactyl Panel Admin Username/Password is {{ pt_user }} / {{ pt_user_pass }}"
-      - "====================================================================="
-      - "Please run this command to change your email settings: php artisan p:environment:mail"
+- include: finish.yml
 ...
