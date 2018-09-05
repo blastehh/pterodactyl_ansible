@@ -20,3 +20,10 @@
   strategy: free
   roles:
     - pteropanelupgrade
+
+- hosts: pterodaemon
+  become: yes
+  become_method: sudo
+  strategy: free
+  roles:
+    - pterodaemonupgrade

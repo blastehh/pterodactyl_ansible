@@ -1,0 +1,27 @@
+---
+- debug:
+    msg: "Starting upgrade to {{ latest_version }}"
+  when: do_upgrade is defined
+
+- name: Download Daemon Files
+  get_url:
+    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ latest_version }}/daemon.tar.gz"
+    dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
+    force: yes
+
+- name: Stop the Wings Service
+  service: name=wings enabled=yes state=stopped
+
+- name: Extract Daemon Files
+  unarchive:
+    src: "{{ ptd_dir }}/daemon/daemon.tar.gz"
+    dest: "{{ ptd_dir }}/daemon/"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: Update the Daemon
+  command: "npm update --only=production"
+  args:
+    chdir: "{{ ptd_dir }}/daemon/"
+...

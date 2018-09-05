@@ -1,0 +1,13 @@
+---
+- name: Restart the Wings Service
+  service: name=wings enabled=yes state=restarted
+
+- debug:
+    msg:
+      - "Remember to rebuild and restart your servers, run these from the panel:"
+      - "php artisan p:server:rebuild --node=###"
+      - "php artisan p:server:bulk-power restart --nodes=###"
+  when: ptversioninstalled is version('0.6.0', '<')
+
+- include: versioncheck.yml
+...

@@ -10,6 +10,8 @@
     owner: www-data
     group: www-data
     recurse: yes
-
+  when: do_upgrade is defined
+  
 - include: finish.yml
+  when: do_upgrade is defined
 ...

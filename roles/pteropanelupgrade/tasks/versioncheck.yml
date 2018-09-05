@@ -1,7 +1,10 @@
 ---
 - name: Check for latest version
-  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
+  uri: url="https://api.github.com/repos/pterodactyl/panel/releases/latest" return_content="yes"
   register: ptversion
+
+- set_fact:
+    latest_version: "{{ ptversion.json.tag_name | regex_search('([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})') }}"
 
 - name: Check Installed Version
   shell: "grep -m 1 -oE '([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})' {{ pt_dir }}/config/app.php"
@@ -10,11 +13,11 @@
 - name: Compare Version
   set_fact:
     do_upgrade: yes
-  when: ptversioninstalled.stdout is version(ptversion.json.panel, '<=')
+  when: ptversioninstalled.stdout is version(latest_version, '<')
 
 - name: Version Result
   debug:
     msg: 
-      - "Latest: {{ ptversion.json.panel }}"
+      - "Latest: {{ latest_version }}"
       - "Installed: {{ ptversioninstalled.stdout }}"
 ...

@@ -1,10 +1,10 @@
 ---
 - debug:
-    msg: "Starting upgrade to {{ ptversion.json.panel }}"
+    msg: "Starting upgrade to {{ latest_version }}"
 
 - name: Download Panel Files
   get_url:
-    url: "https://github.com/pterodactyl/panel/releases/download/v{{ ptversion.json.panel }}/panel.tar.gz"
+    url: "https://github.com/pterodactyl/panel/releases/download/v{{ latest_version }}/panel.tar.gz"
     dest: "{{ pt_dir }}/panel.tar.gz"
     force: yes
 
@@ -35,9 +35,10 @@
 
 - name: Delete Cache Contents
   shell: "/bin/rm -rf {{ pt_dir }}/bootstrap/cache/*"
+  when: ptversioninstalled.stdout is version('0.7.0', '<')
 
 - name: Install the Panel
-  command: composer install --no-dev
+  command: composer install --no-dev --optimize-autoloader
   args:
     chdir: "{{ pt_dir }}"
 
@@ -55,4 +56,10 @@
   command: "php artisan db:seed --force -n"
   args:
     chdir: "{{ pt_dir }}"
+
+- name: Artisan Cleanup API Keys
+  command: "php artisan p:migration:clean-orphaned-keys --force -n"
+  args:
+    chdir: "{{ pt_dir }}"
+  when: ptversioninstalled.stdout is version('0.7.0', '<')
 ...

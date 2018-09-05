@@ -1,0 +1,27 @@
+---
+- name: Check for latest version
+  uri: url="https://api.github.com/repos/pterodactyl/daemon/releases/latest" return_content="yes"
+  register: ptversion
+
+- set_fact:
+    latest_version: "{{ ptversion.json.tag_name | regex_search('([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})') }}"
+
+- name: Check Installed Version
+  slurp:
+    src: "{{ ptd_dir }}/daemon/package.json"
+  register: package
+
+- set_fact:
+    ptversioninstalled: "{{ (package.content|b64decode|from_json).version }}"
+
+- name: Compare Version
+  set_fact:
+    do_upgrade: yes
+  when: ptversioninstalled is version(latest_version, '<')
+
+- name: Version Result
+  debug:
+    msg: 
+      - "Latest: {{ latest_version }}"
+      - "Installed: {{ ptversioninstalled }}"
+...
