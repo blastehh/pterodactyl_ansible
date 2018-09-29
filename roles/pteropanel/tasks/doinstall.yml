@@ -52,7 +52,7 @@
     force: no
 
 - name: Install the Panel
-  command: composer install --no-dev
+  command: composer install --no-dev --optimize-autoloader
   args:
     chdir: "{{ pt_dir }}"
 
