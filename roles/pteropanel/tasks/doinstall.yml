@@ -1,7 +1,5 @@
 ---
-- name: Check for latest version
-  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
-  register: ptversion
+- include: versioncheck.yml
 
 - name: Create Panel Folders
   file:
@@ -15,7 +13,7 @@
 
 - name: Download Panel Files
   get_url:
-    url: "https://github.com/pterodactyl/panel/releases/download/v{{ ptversion.json.panel }}/panel.tar.gz"
+    url: "https://github.com/pterodactyl/panel/releases/download/v{{ latest_version }}/panel.tar.gz"
     dest: "{{ pt_dir }}/panel.tar.gz"
     force: yes
 

@@ -33,6 +33,7 @@
     - "device-mapper-persistent-data"
     - "lvm2"
     - "docker-ce"
+    - "python-docker-py"
 
 - name: CentOS | Start the Docker Service
   service: name=docker state=started enabled=yes

@@ -1,7 +1,5 @@
 ---
-- name: Check for the Latest Daemon Version
-  uri: url="https://cdn.pterodactyl.io/releases/latest.json" return_content="yes"
-  register: ptversion
+- include: versioncheck.yml
 
 - name: Create Daemon Folders
   file:
@@ -16,7 +14,7 @@
 
 - name: Download Daemon Files
   get_url:
-    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ ptversion.json.daemon }}/daemon.tar.gz"
+    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ latest_version }}/daemon.tar.gz"
     dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
     force: yes
 

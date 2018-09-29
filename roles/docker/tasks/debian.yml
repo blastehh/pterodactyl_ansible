@@ -18,6 +18,7 @@
     - "ca-certificates"
     - "software-properties-common"
     - "curl"
+    - "python-docker"
 
 - name: Debian | Debian Specific Dependencies
   apt:
