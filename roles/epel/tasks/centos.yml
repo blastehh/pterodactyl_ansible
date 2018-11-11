@@ -1,10 +1,9 @@
 - name: CentOS | Install Repo
   yum:
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "epel-release"
-    - "https://centos7.iuscommunity.org/ius-release.rpm"
+    name:
+      - "epel-release"
+      - "https://centos7.iuscommunity.org/ius-release.rpm"
 
 - name: CentOS | Update All Packages
   yum:

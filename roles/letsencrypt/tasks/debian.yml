@@ -7,21 +7,19 @@
 - name: Debian/Ubuntu | Install Certbot-nginx
   apt:
     update_cache: "yes"
-    name: "{{ item }}"
     state: "latest"
-  with_items:
-    - "software-properties-common"
-    - "certbot"
+    name:
+      - "software-properties-common"
+      - "certbot"
   when: "'pterodaemon' in group_names"
 
 - name: Debian/Ubuntu | Install Certbot-nginx
   apt:
     update_cache: "yes"
-    name: "{{ item }}"
     state: "latest"
-  with_items:
-    - "software-properties-common"
-    - "python-certbot-nginx"
+    name:
+      - "software-properties-common"
+      - "python-certbot-nginx"
   when: "'pteropanel' in group_names"
 
 - name: "Debian | Add {{ ansible_distribution_release }}-backports"
@@ -38,11 +36,10 @@
 - name: "Debian | Install Certbot from {{ ansible_distribution_release }}-backports"
   apt:
     update_cache: "yes"
-    name: "{{ item }}"
     state: "latest"
     default_release: "{{ ansible_distribution_release }}-backports"
-  with_items:
-    - "certbot"
+    name:
+      - "certbot"
   when: "ansible_distribution|lower == 'debian'"
 
 - name: Debian/Ubuntu | Get service List

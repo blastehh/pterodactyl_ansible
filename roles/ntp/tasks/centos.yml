@@ -1,10 +1,9 @@
 ---
 - name: CentOS | Install NTP
   yum:
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "ntp"
+    name:
+      - "ntp"
 
 - name: CentOS | Stop NTP Service
   service: name=ntpd state=stopped

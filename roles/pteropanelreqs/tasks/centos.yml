@@ -1,14 +1,24 @@
 ---
 - name: CentOS | Install Panel Dependencies
   yum:
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "mod_php72u"    - "php72u-common"    - "php72u-fpm"    - "php72u-cli"    - "php72u-json"    - "php72u-mysqlnd"    - "php72u-gd"    - "php72u-mbstring"    - "php72u-pdo"    - "php72u-bcmath"    - "php72u-xml"    - "php72u-opcache"
-    - "nginx"
-    - "redis"
-    - "libselinux-python"
-    - "policycoreutils-python"
+    name:
+      - "mod_php72u"
+      - "php72u-common"
+      - "php72u-fpm"
+      - "php72u-cli"
+      - "php72u-json"
+      - "php72u-mysqlnd"
+      - "php72u-gd"
+      - "php72u-mbstring"
+      - "php72u-pdo"
+      - "php72u-bcmath"
+      - "php72u-xml"
+      - "php72u-opcache"
+      - "nginx"
+      - "redis"
+      - "libselinux-python"
+      - "policycoreutils-python"
 
 - name: CentOS | Start the Redis Service
   service: name=redis state=started enabled=yes

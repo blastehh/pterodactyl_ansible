@@ -1,19 +1,18 @@
 ---
 - name: CentOS | Remove Old Docker Versions
   yum:
-    name: "{{ item }}"
     state: "absent"
-  with_items:
-    - "docker"
-    - "docker-client"
-    - "docker-client-latest"
-    - "docker-common"
-    - "docker-latest"
-    - "docker-latest-logrotate"
-    - "docker-logrotate"
-    - "docker-selinux"
-    - "docker-engine-selinux"
-    - "docker-engine"
+    name:
+      - "docker"
+      - "docker-client"
+      - "docker-client-latest"
+      - "docker-common"
+      - "docker-latest"
+      - "docker-latest-logrotate"
+      - "docker-logrotate"
+      - "docker-selinux"
+      - "docker-engine-selinux"
+      - "docker-engine"
 
 - name: CentOS | Add Docker Repository
   yum_repository:
@@ -27,13 +26,12 @@
 
 - name: CentOS | Install DockerCE
   yum:
-    name: "{{ item }}"
     state: "latest"
-  with_items:
-    - "device-mapper-persistent-data"
-    - "lvm2"
-    - "docker-ce"
-    - "python-docker-py"
+    name:
+      - "device-mapper-persistent-data"
+      - "lvm2"
+      - "docker-ce"
+      - "python-docker-py"
 
 - name: CentOS | Start the Docker Service
   service: name=docker state=started enabled=yes

@@ -2,10 +2,9 @@
 - name: Debian/Ubuntu | Install NTP
   apt:
     update_cache: "yes"
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "ntp"
+    name:
+      - "ntp"
   register: ntpinstall
 
 - name: Debian/Ubuntu | Stop NTP Service

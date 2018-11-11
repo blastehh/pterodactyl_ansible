@@ -6,12 +6,11 @@
 
 - name: CentOS | Install MariaDB
   yum:
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "MariaDB-common"
-    - "MariaDB-server"
-    - "MySQL-python"
+    name:
+      - "MariaDB-common"
+      - "MariaDB-server"
+      - "MySQL-python"
 
 - name: CentOS | Start the MariaDB Service
   service: name=mariadb state=started enabled=yes

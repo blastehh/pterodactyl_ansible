@@ -1,24 +1,22 @@
 ---
 - name: Debian/Ubuntu | Remove Old Docker versions
   apt:
-    name: "{{ item }}"
     state: "absent"
-  with_items:
-    - "docker"
-    - "docker-engine"
-    - "docker.io"
+    name:
+      - "docker"
+      - "docker-engine"
+      - "docker.io"
 
 - name: Debian/Ubuntu | Install Docker Dependencies
   apt:
     update_cache: "yes"
-    name: "{{ item }}"
     state: "present"
-  with_items:
-    - "apt-transport-https"
-    - "ca-certificates"
-    - "software-properties-common"
-    - "curl"
-    - "python-docker"
+    name:
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "software-properties-common"
+      - "curl"
+      - "python-docker"
 
 - name: Debian | Debian Specific Dependencies
   apt:
