@@ -24,4 +24,9 @@
   command: "npm update --only=production"
   args:
     chdir: "{{ ptd_dir }}/daemon/"
+
+- name: Add Any New Dependencies
+  command: "npm install --only=production"
+  args:
+    chdir: "{{ ptd_dir }}/daemon/"
 ...
