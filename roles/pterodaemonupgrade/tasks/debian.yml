@@ -2,8 +2,8 @@
 - include: versioncheck.yml
 
 - include: doupgrade.yml
-  when: do_upgrade is defined
+  when: do_daemon_upgrade is defined
   
 - include: finish.yml
-  when: do_upgrade is defined
+  when: do_daemon_upgrade is defined
 ...

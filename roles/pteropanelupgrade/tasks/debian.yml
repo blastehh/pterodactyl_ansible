@@ -2,7 +2,7 @@
 - include: versioncheck.yml
 
 - include: doupgrade.yml
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 
 - name: Debian/Ubuntu | Chroot Pterodactyl Web Root
   file:
@@ -10,8 +10,8 @@
     owner: www-data
     group: www-data
     recurse: yes
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
   
 - include: finish.yml
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 ...

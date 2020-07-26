@@ -2,7 +2,7 @@
 - include: versioncheck.yml
 
 - include: doupgrade.yml
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 
 - name: CentOS | Chroot Pterodactyl Web Root
   file:
@@ -10,19 +10,19 @@
     owner: nginx
     group: nginx
     recurse: yes
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
   
 - name: CentOS | semanage fcontext
   sefcontext:
     target: '{{ pt_dir }}/storage(/.*)?'
     setype: httpd_sys_rw_content_t
     state: present
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 
 - name: "CentOS | restorecon -R {{ pt_dir }}"
   command: "restorecon -R {{ pt_dir }}"
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 
 - include: finish.yml
-  when: do_upgrade is defined
+  when: do_panel_upgrade is defined
 ...

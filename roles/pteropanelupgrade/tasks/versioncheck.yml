@@ -12,7 +12,7 @@
 
 - name: Compare Version
   set_fact:
-    do_upgrade: yes
+    do_panel_upgrade: yes
   when: ptversioninstalled.stdout is version(latest_version, '<')
 
 - name: Version Result

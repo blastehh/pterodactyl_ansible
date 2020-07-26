@@ -16,7 +16,7 @@
 
 - name: Compare Version
   set_fact:
-    do_upgrade: yes
+    do_daemon_upgrade: yes
   when: ptversioninstalled is version(latest_version, '<')
 
 - name: Version Result
