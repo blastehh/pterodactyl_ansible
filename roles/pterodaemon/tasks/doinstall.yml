@@ -16,6 +16,7 @@
   get_url:
     url: "https://github.com/pterodactyl/wings/releases/download/v{{ latest_ptdversion }}/wings_linux_amd64"
     dest: "/usr/local/bin/wings"
+    mode: "u+x"
     force: yes
 
 - name: Create the Daemon Service
