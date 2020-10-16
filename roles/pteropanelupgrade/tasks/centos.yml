@@ -1,6 +1,11 @@
 ---
 - include: versioncheck.yml
 
+- name: Debian/Ubuntu | Minimum Version
+  fail:
+    msg: Upgrade not supported for versions below 1.0.0
+  when: ptversioninstalled.stdout is version('1.0.0', '<')
+
 - include: doupgrade.yml
   when: do_panel_upgrade is defined
 

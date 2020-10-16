@@ -33,17 +33,18 @@
     mode: 0755
     recurse: yes
 
-- name: Delete Cache Contents
-  shell: "/bin/rm -rf {{ pt_dir }}/bootstrap/cache/*"
-  when: ptversioninstalled.stdout is version('0.7.0', '<')
-
 - name: Install the Panel
   command: composer install --no-dev --optimize-autoloader
   args:
     chdir: "{{ pt_dir }}"
 
-- name: Clear Cached Views
+- name: Clear Cached View Templates
   command: "php artisan view:clear"
+  args:
+    chdir: "{{ pt_dir }}"
+
+- name: Clear Cached Config Templates
+  command: "php artisan config:clear"
   args:
     chdir: "{{ pt_dir }}"
 
@@ -56,10 +57,4 @@
   command: "php artisan db:seed --force -n"
   args:
     chdir: "{{ pt_dir }}"
-
-- name: Artisan Cleanup API Keys
-  command: "php artisan p:migration:clean-orphaned-keys --force -n"
-  args:
-    chdir: "{{ pt_dir }}"
-  when: ptversioninstalled.stdout is version('0.7.0', '<')
 ...

@@ -1,32 +1,16 @@
 ---
 - debug:
-    msg: "Starting upgrade to {{ latest_version }}"
+    msg: "Starting upgrade to {{ latest_ptdversion }}"
   when: do_upgrade is defined
-
-- name: Download Daemon Files
-  get_url:
-    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ latest_version }}/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
-    force: yes
 
 - name: Stop the Wings Service
   service: name=wings enabled=yes state=stopped
 
-- name: Extract Daemon Files
-  unarchive:
-    src: "{{ ptd_dir }}/daemon/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/"
-    remote_src: yes
-    extra_opts:
-      - --strip-components=1
+- name: Download Daemon File
+  get_url:
+    url: "https://github.com/pterodactyl/wings/releases/download/v{{ latest_ptdversion }}/wings_linux_amd64"
+    dest: "/usr/local/bin/wings"
+    mode: "u+x"
+    force: yes
 
-- name: Update the Daemon
-  command: "npm update --only=production"
-  args:
-    chdir: "{{ ptd_dir }}/daemon/"
-
-- name: Add Any New Dependencies
-  command: "npm install --only=production"
-  args:
-    chdir: "{{ ptd_dir }}/daemon/"
 ...
