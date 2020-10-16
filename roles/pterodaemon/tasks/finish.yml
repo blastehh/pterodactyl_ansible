@@ -2,5 +2,5 @@
 - name: Finished
   debug:
     msg:
-      - "Save your config at {{ ptd_dir }}/daemon/config/core.json and then run systemctl start wings"
+      - "Save your config at /etc/pterodactyl/config.yml and then run systemctl start wings"
 ...

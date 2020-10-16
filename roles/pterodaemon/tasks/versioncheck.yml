@@ -1,8 +1,8 @@
 ---
 - name: Check for latest version
-  uri: url="https://api.github.com/repos/pterodactyl/daemon/releases/latest" return_content="yes"
-  register: ptversion
+  uri: url="https://api.github.com/repos/pterodactyl/wings/releases/latest" return_content="yes"
+  register: ptdversion
 
 - set_fact:
-    latest_version: "{{ ptversion.json.tag_name | regex_search('([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})') }}"
+    latest_ptdversion: "{{ ptdversion.json.tag_name | regex_search('([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})') }}"
 ...

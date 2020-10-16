@@ -9,27 +9,14 @@
     group: root
     mode: 0775
   with_items:
-    - "{{ ptd_dir }}/daemon"
+    - "/etc/pterodactyl"
     - "{{ ptd_dir }}/daemon-data"
 
-- name: Download Daemon Files
+- name: Download Daemon File
   get_url:
-    url: "https://github.com/pterodactyl/daemon/releases/download/v{{ latest_version }}/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/daemon.tar.gz"
+    url: "https://github.com/pterodactyl/wings/releases/download/v{{ latest_ptdversion }}/wings_linux_amd64"
+    dest: "/usr/local/bin/wings"
     force: yes
-
-- name: Extract Daemon Files
-  unarchive:
-    src: "{{ ptd_dir }}/daemon/daemon.tar.gz"
-    dest: "{{ ptd_dir }}/daemon/"
-    remote_src: yes
-    extra_opts:
-      - --strip-components=1
-
-- name: Install the Daemon
-  command: "npm install --only=production"
-  args:
-    chdir: "{{ ptd_dir }}/daemon/"
 
 - name: Create the Daemon Service
   template:

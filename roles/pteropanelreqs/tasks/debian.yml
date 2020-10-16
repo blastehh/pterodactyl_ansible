@@ -33,18 +33,17 @@
     state: "present"
     name:
       - "sudo"
-      - "php7.2"
-      - "php7.2-cli"
-      - "php7.2-gd"
-      - "php7.2-mysql"
-      - "php7.2-pdo"
-      - "php7.2-mbstring"
-      - "php7.2-tokenizer"
-      - "php7.2-bcmath"
-      - "php7.2-xml"
-      - "php7.2-fpm"
-      - "php7.2-curl"
-      - "php7.2-zip"
+      - "php7.4"
+      - "php7.4-cli"
+      - "php7.4-gd"
+      - "php7.4-mysql"
+      - "php7.4-common"
+      - "php7.4-mbstring"
+      - "php7.4-bcmath"
+      - "php7.4-xml"
+      - "php7.4-fpm"
+      - "php7.4-curl"
+      - "php7.4-zip"
       - "python-mysqldb"
       - "nginx"
       - "curl"
@@ -52,4 +51,7 @@
       - "unzip"
       - "git"
       - "redis-server"
+
+- name: Debian/Ubuntu | Start the Redis Service
+  service: name=redis-server state=started enabled=yes
 ...

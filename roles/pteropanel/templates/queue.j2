@@ -7,7 +7,11 @@
 
 [Unit]
 Description=Pterodactyl Queue Worker
+{% if ansible_distribution == 'CentOS' %}
+After=redis.service
+{% else %}
 After=redis-server.service
+{% endif %}
 
 [Service]
 # On some systems the user and group might be different.

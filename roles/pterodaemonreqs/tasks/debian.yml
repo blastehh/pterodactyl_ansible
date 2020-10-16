@@ -1,21 +1,9 @@
 ---
-- name: Debian/Ubuntu | Add the NodeJS Repository
-  shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-  args:
-    warn: False
-
 - name: Debian/Ubuntu | Install Daemon Dependencies
   apt:
     update_cache: "yes"
     state: "present"
     name:
       - "sudo"
-      - "tar"
-      - "unzip"
-      - "make"
-      - "gcc"
-      - "g++"
-      - "python"
       - "curl"
-      - "nodejs"
 ...
