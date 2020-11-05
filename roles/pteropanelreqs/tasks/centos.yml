@@ -15,6 +15,7 @@
       - "php74-bcmath"
       - "php74-xml"
       - "php74-opcache"
+      - "php74-pecl-zip"
       - "nginx"
       - "redis"
       - "libselinux-python"
