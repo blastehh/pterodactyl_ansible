@@ -3,7 +3,7 @@
     state: "present"
     name:
       - "epel-release"
-      - "https://centos7.iuscommunity.org/ius-release.rpm"
+      - "https://repo.ius.io/ius-release-el7.rpm"
 
 - name: CentOS | Update All Packages
   yum:
