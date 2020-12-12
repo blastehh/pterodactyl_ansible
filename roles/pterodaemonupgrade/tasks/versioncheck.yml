@@ -22,7 +22,7 @@
   register: wings_ver
 
 - set_fact:
-    ptversioninstalled: "{{ (wings_ver.stdout }}"
+    ptversioninstalled: "{{ wings_ver.stdout }}"
 
 - name: Compare Version
   set_fact:

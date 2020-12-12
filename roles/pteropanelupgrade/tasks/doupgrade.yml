@@ -18,8 +18,8 @@
     src: "{{ pt_dir }}/panel.tar.gz"
     dest: "{{ pt_dir }}"
     remote_src: yes
-    extra_opts:
-      - --strip-components=1
+#    extra_opts:
+#      - --strip-components=1
 
 - name: Chmod Log Folder
   file:
