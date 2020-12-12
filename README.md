@@ -1,5 +1,5 @@
 # [Pterodactyl](https://pterodactyl.io/) installer for [Ansible](https://www.ansible.com/)
-Ansible playbook for setting up the pterodactyl panel and daemon
+Ansible playbook for setting up the pterodactyl panel and Wings
 
 ## Requirements
 
@@ -17,15 +17,15 @@ Ansible playbook for setting up the pterodactyl panel and daemon
 3. Run the playbook `ansible-playbook pterodactyl.yml -b -K`
 4. Save the passwords that shows in the output logs
 5. Configure your email settings with `php artisan p:environment:mail`
-6. Copy the config from your panel to `/srv/daemon/config/core.json` on your new daemon server
-7. Run `systemctl start wings` on your daemon server
+6. Copy the config from your panel to `/etc/pterodactyl/config.yml` on your new Wings server
+7. Run `systemctl start wings` on your wings server
 
-## Steps For Daemon Only Install
+## Steps For Wings Only Install
 
 1. Install your OS
 2. Set up ansible on your controller machine and make sure that your server has the required entry in the `/etc/ansible/hosts` file.
 3. Run the playbook `ansible-playbook pterodactyl.yml -b -K -l 'pterodaemon'`
-4. Copy the config from your panel to `/srv/daemon/config/core.json` on your new daemon server
+4. Copy the config from your panel to `/etc/pterodactyl/config.yml` on your new Wings server
 5. Run `systemctl start wings`
 
 ## Steps For Panel Only Install
