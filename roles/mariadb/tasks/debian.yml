@@ -4,16 +4,36 @@
   args:
     warn: False
 
-- name: Debian/Ubuntu | Configure MariaDB Installation
-  debconf:
+- name: Debian/Ubuntu | Install MariaDB
+  apt:
     name: mariadb-server
-    question: "{{ item }}"
-    vtype: password
-    value: "{{ db_pass }}"
+    state: latest
+    update_cache: true
+
+- name: Debian/Ubuntu | Start the MariaDB Service
+  service: name=mariadb state=started enabled=yes
+
+- name: Debian/Ubuntu | Remove All Anonymous Users
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+- name: Debian/Ubuntu | Disable Remote Root Login
+  command: 'mysql -ne "{{ item }}"'
   with_items:
-    - mysql-server/root_password
-    - mysql-server/root_password_again
-  register: configure_install
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+  changed_when: False
+
+- name: Debian/Ubuntu | Remove the Test Database
+  mysql_db: db=test state=absent
+
+- name: Debian/Ubuntu | Set the Root Password for MariaDB
+  mysql_user: user=root check_implicit_admin=yes login_password="{{ db_pass }}" password="{{ db_pass }}" host="{{ item }}"
+  with_items:
+    - "localhost"
+    - "127.0.0.1"
+    - "::1"
   
 - debug:
     msg: "Database Root password set to '{{ db_pass }}', save this somewhere."
