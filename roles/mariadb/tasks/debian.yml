@@ -38,11 +38,4 @@
 - debug:
     msg: "Database Root password set to '{{ db_pass }}', save this somewhere."
 
-- name: Debian/Ubuntu | Install MariaDB with custom configuration
-  apt:
-    name: mariadb-server
-    state: latest
-    update_cache: true
-  when: configure_install is successful
-  register: install_mariadb
 ...
