@@ -73,7 +73,7 @@
     chdir: "{{ pt_dir }}"
 #php artisan p:environment:mail
 - name: Artisan Mail Setup
-  command: php artisan p:environment:mail --driver="{{ pt_mail_driver }}" --email="{{ pt_email }}" --from="{{ pt_email_from }}" --encryption="{{ pt_mail_encrypt }}" -n
+  command: php artisan p:environment:mail --driver="{{ pt_mail_driver }}" --email="{{ pt_email_panel }}" --from="{{ pt_email_from }}" --encryption="{{ pt_mail_encrypt }}" -n
   args:
     chdir: "{{ pt_dir }}"
 
