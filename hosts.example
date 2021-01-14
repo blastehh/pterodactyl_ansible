@@ -20,7 +20,7 @@ ptd_dir=/srv
 
 [pteropanel:vars]
 pt_email=<YOUR EMAIL> #CHANGE ME - Your Email Address
-pt_email=<YOUR PANEL EMAIL ADDRESS> #CHANGE ME - Panel Send From Email Address
+pt_email_panel=<YOUR PANEL EMAIL ADDRESS> #CHANGE ME - Panel Send From Email Address
 pt_email_from=Pterodactyl Panel #CHANGE ME - Panel Send From Email Name
 pt_user_fname=John #CHANGE ME - Panel Admin First Name
 pt_user_lname=Smith #CHANGE ME - Panel Admin Last Name
