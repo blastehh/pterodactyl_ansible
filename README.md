@@ -3,7 +3,7 @@ Ansible playbook for setting up the pterodactyl panel and Wings
 
 ## Requirements
 
-* A fresh install of **Ubuntu 16.04**, **CentOS 7.4+**, or **Debian 9**.
+* A fresh install of**Ubuntu 18.04**, **Ubuntu 16.04**, **CentOS 7.4+**, or **Debian 9**.
 * **python** installed for ansible to work. This playbook will try to install python first.
 
 ## Generic steps for both types of install
