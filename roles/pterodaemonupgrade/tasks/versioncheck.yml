@@ -18,11 +18,11 @@
 
 - name: Check Installed Version
   shell: 
-    cmd: /usr/local/bin/wings --version
+    cmd: /usr/local/bin/wings version
   register: wings_ver
 
 - set_fact:
-    ptversioninstalled: "{{ wings_ver.stdout }}"
+    ptversioninstalled: "{{ wings_ver.stdout | regex_search('([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})') }}"
 
 - name: Compare Version
   set_fact:
