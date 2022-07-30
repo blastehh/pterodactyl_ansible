@@ -52,7 +52,8 @@ server {
         {% if ansible_distribution == 'CentOS' %}
         fastcgi_pass unix:/var/run/php-fpm/pterodactyl.sock;
         {% else %}
-        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        #fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock
         {% endif %}
         fastcgi_index index.php;
         include fastcgi_params;

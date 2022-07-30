@@ -27,6 +27,9 @@ Restart=always
 {% endif %}
 
 ExecStart=/usr/bin/php {{ pt_dir }}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+StartLimitInterval=180
+StartLimitBurst=30
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target

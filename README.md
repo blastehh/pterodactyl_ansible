@@ -3,9 +3,11 @@ Ansible playbook for setting up the pterodactyl panel and Wings
 
 ## Requirements
 
-* A fresh install of**Ubuntu 18.04**, **Ubuntu 16.04**, **CentOS 7.4+**, or **Debian 9**.
+* A fresh install of**Ubuntu 20.04**, **CentOS 7.4+**, or **Debian 9**.
 * **python** installed for ansible to work. This playbook will try to install python first.
 
+This playbook is updated to install php 8.1 for Ubuntu 20.04, but is untested.
+ 
 ## Generic steps for both types of install
 
 1. Check the `hosts.example` file on the required variables for your ansible hosts file `/etc/ansible/hosts`
