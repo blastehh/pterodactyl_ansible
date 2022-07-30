@@ -33,6 +33,13 @@
     mode: 0755
     recurse: yes
 
+- name: Install Composer
+  shell: curl -sSL https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    chdir: "{{ pt_dir }}"
+    creates: /usr/local/bin/composer
+    warn: false
+
 - name: Install the Panel
   command: composer install --no-dev --optimize-autoloader
   args:
