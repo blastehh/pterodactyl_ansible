@@ -20,6 +20,8 @@
   strategy: free
   roles:
     - pteropanelupgrade
+  environment:
+    COMPOSER_ALLOW_SUPERUSER: 1
 
 - hosts: pterodaemon
   become: yes
